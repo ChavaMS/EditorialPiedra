@@ -1,0 +1,301 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C71FFEA6-B8B4-48B3-9BFD-4B9425F51024}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>AppProyectoBD</RootNamespace>
+    <AssemblyName>AppProyectoBD</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>PIEDRA.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Bunifu.UI.WinForms.BunifuButton">
+      <HintPath>..\..\Bunifu Ui Winform 1.10.0.0\Bunifu.UI.WinForms.BunifuButton.dll</HintPath>
+    </Reference>
+    <Reference Include="Bunifu_UI_v1.5.3">
+      <HintPath>..\..\Bunifu Ui Winform 1.10.0.0\Bunifu_UI_v1.5.3.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialSkin, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialSkin.Updated.0.2.2\lib\MaterialSkin.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=8.0.15.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Xceed.Words.NET, Version=1.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocX.1.3.0\lib\net40\Xceed.Words.NET.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="activos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="activos.Designer.cs">
+      <DependentUpon>activos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AgregarRedesSociales.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AgregarRedesSociales.Designer.cs">
+      <DependentUpon>AgregarRedesSociales.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AgregarTipoTrabajoEmpleado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AgregarTipoTrabajoEmpleado.Designer.cs">
+      <DependentUpon>AgregarTipoTrabajoEmpleado.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CirclePicture.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CircularPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CircularPictureBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Conexion.cs" />
+    <Compile Include="Contenedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Contenedor.Designer.cs">
+      <DependentUpon>Contenedor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="edicionEmpleado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="edicionEmpleado.Designer.cs">
+      <DependentUpon>edicionEmpleado.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Empleados.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Empleados.Designer.cs">
+      <DependentUpon>Empleados.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormularioPago.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormularioPago.Designer.cs">
+      <DependentUpon>FormularioPago.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormularioProgramarPago.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormularioProgramarPago.Designer.cs">
+      <DependentUpon>FormularioProgramarPago.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Funciones.cs" />
+    <Compile Include="ingresos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ingresos.Designer.cs">
+      <DependentUpon>ingresos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MessageBox.Designer.cs">
+      <DependentUpon>MessageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="pagos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="pagos.Designer.cs">
+      <DependentUpon>pagos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PanelJosue.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proyectos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Proyectos.Designer.cs">
+      <DependentUpon>Proyectos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="registroEmpleado.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="registroEmpleado.Designer.cs">
+      <DependentUpon>registroEmpleado.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Reportes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Reportes.Designer.cs">
+      <DependentUpon>Reportes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Trabajos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Trabajos.Designer.cs">
+      <DependentUpon>Trabajos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utilidades.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Utilidades.Designer.cs">
+      <DependentUpon>Utilidades.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VentanaPrincipal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VentanaPrincipal.Designer.cs">
+      <DependentUpon>VentanaPrincipal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VisuaProyecto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisuaProyecto.Designer.cs">
+      <DependentUpon>VisuaProyecto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VisuaTrabajos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisuaTrabajos.Designer.cs">
+      <DependentUpon>VisuaTrabajos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="worker_project_registry.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="worker_project_registry.Designer.cs">
+      <DependentUpon>worker_project_registry.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="activos.resx">
+      <DependentUpon>activos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AgregarRedesSociales.resx">
+      <DependentUpon>AgregarRedesSociales.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AgregarTipoTrabajoEmpleado.resx">
+      <DependentUpon>AgregarTipoTrabajoEmpleado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Contenedor.resx">
+      <DependentUpon>Contenedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="edicionEmpleado.resx">
+      <DependentUpon>edicionEmpleado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Empleados.resx">
+      <DependentUpon>Empleados.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormularioPago.resx">
+      <DependentUpon>FormularioPago.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormularioProgramarPago.resx">
+      <DependentUpon>FormularioProgramarPago.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ingresos.resx">
+      <DependentUpon>ingresos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MessageBox.resx">
+      <DependentUpon>MessageBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="pagos.resx">
+      <DependentUpon>pagos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Proyectos.resx">
+      <DependentUpon>Proyectos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="registroEmpleado.resx">
+      <DependentUpon>registroEmpleado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reportes.resx">
+      <DependentUpon>Reportes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Trabajos.resx">
+      <DependentUpon>Trabajos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Utilidades.resx">
+      <DependentUpon>Utilidades.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VentanaPrincipal.resx">
+      <DependentUpon>VentanaPrincipal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisuaProyecto.resx">
+      <DependentUpon>VisuaProyecto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisuaTrabajos.resx">
+      <DependentUpon>VisuaTrabajos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="worker_project_registry.resx">
+      <DependentUpon>worker_project_registry.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PIEDRA.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

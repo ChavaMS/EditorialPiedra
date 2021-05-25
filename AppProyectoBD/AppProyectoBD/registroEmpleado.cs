@@ -1,0 +1,549 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using MySql.Data.MySqlClient;
+using AppProyectoBD;
+
+namespace PruebaA
+{
+	public partial class registroEmpleado : Form
+	{
+		//SE ESTABLECE UNA CONEXION PARA PODER USARSE EN MYSQLADAPTER
+		MySqlConnection connection = new MySqlConnection("server=localhost;database=EditorialPiedra;Uid=root;pwd=1016;Integrated Security = True");
+		Conexion co;
+		Empleados f1;
+
+		//TABLAS INTERNAS PARA AGREGAR A LAS TABLAS DEL DISEÑO
+		DataTable tels = new DataTable();
+		DataTable redes = new DataTable();
+
+		//lista de trabajos
+		List<string> works = new List<string>();
+		List<int> idRedes = new List<int>();
+
+		//Variables
+		public bool resultado1 = false;
+		Bitmap bmp;
+		bool hayImagen = false;
+
+		public registroEmpleado(Empleados form, Conexion co)
+		{
+			InitializeComponent();
+			Region = Funciones.redondear(Width, Height);
+
+			f1 = form;
+			this.co = co;
+			this.CenterToScreen();
+
+			tels.Columns.Add("Número de teléfono", typeof(Int64));
+
+			redes.Columns.Add("Red social", typeof(string));
+			redes.Columns.Add("Usuario", typeof(string));
+
+			tablaTels.DataSource = tels;
+
+			tablaRedes.DataSource = redes;
+		}
+
+		//DECLARACIÓN DE VARIABLES DONDE SE ALMACENARÁ INFORMACIÓN
+		public static string nombre = "";
+		public static string email = "";
+		public static string calle = "";
+		public static string colonia = "";
+		public static int cp;
+		public static string ciudad = "";
+		public static string estado = "";
+		public static string rfc = "";
+		public static string fechaNac = "";
+		public static string sexo = "";
+		public static string imgTrabajador1Loc = "";
+		public static string tipoEmpleo = "";
+
+		private void registroEmpleado_Load(object sender, EventArgs e)
+		{
+
+			//PASA TODOS LOS DATOS AL COMBOBOX
+			cargarEmpleos();
+			cargarRedes();
+
+		}
+
+		public string queryToString(string query)
+		{//NOS TRANSFORMA EL RESULTADO DE UNA QUERY A STRING
+			DataTable tabla = new DataTable();
+
+
+			try
+			{
+				co.Comando(query);
+				tabla.Load(co.Leer);
+			}
+
+			catch (Exception)
+			{
+				//System.Windows.Forms.MessageBox.Show("No se ha encontrado la información\nPor ende, no se puede mostrar");
+				AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se puede mostrar la información", 3);
+				mens.ShowDialog();
+			}
+
+			//RETORNA EL RESULTADO DE LA CONSULTA EN STRING
+			return tabla.Rows[0][0].ToString();
+		}
+
+		public void cargarEmpleos()
+		{
+			//COMPLETO
+			ArrayList listaTipoEmpleado = new ArrayList { "Diseñador", "Editor", "Fotógrafo", "Maquetador", "Ilustrador", "Imprenta", "Publicidad" };
+			cbTipoTrab.DataSource = listaTipoEmpleado;
+			cbTipoTrab.SelectedIndex = 0;
+		}
+
+		public void cargarRedes()
+		{
+			List<string> listaTipoCuentas;
+			//REDES SOCIALES
+			string comandoNets = "SELECT NombreRedSocial FROM TipoDeRedSocial;";
+			try
+			{
+				MySqlCommand cmdSel = new MySqlCommand(comandoNets, connection);
+				DataTable dt = new DataTable();
+				MySqlDataAdapter da = new MySqlDataAdapter(cmdSel);
+				da.Fill(dt);
+
+				listaTipoCuentas = dt.AsEnumerable()
+					  .Select(r => r.Field<string>("NombreRedSocial"))
+					  .ToList();
+
+				cbRedes.DataSource = listaTipoCuentas;
+				cbRedes.SelectedIndex = 0;
+			}
+
+
+			catch (Exception)
+			{
+				//System.Windows.Forms.MessageBox.Show("No se han podido cargar los tipos de redes sociales");
+				AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se han podido cargar los tipos de redes sociales", 3);
+				mens.ShowDialog();
+			}
+
+		}
+
+		private void imgTrab1_Click(object sender, EventArgs e)
+		{
+			//ABRE UN DIÁLOGO PARA PODER SELECCIONAR LA IMAGEN
+			OpenFileDialog seleccion = new OpenFileDialog();
+			seleccion.InitialDirectory = "C:\\";
+			seleccion.Filter = "Archivos de imagen (*.jpg)(*.jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png";
+
+			if (seleccion.ShowDialog() == DialogResult.OK)
+			{
+				Bitmap orig = new Bitmap(Path.GetFullPath(seleccion.FileName).Replace(@"\", @"\\"));
+				bmp = new Bitmap(Redimensionar(orig, 270, 270));
+				hayImagen = true;
+				imgTrab1.Image = bmp;
+				label13.Visible = false;
+				label2.Visible = false;
+			}
+		}
+
+		private void label13_Click(object sender, EventArgs e)
+		{
+			//ABRE UN DIÁLOGO PARA PODER SELECCIONAR LA IMAGEN, AL IGUAL QUE EL CIRCULAR PICTURE BOX
+			OpenFileDialog seleccion = new OpenFileDialog();
+			seleccion.InitialDirectory = "C:\\";
+			seleccion.Filter = "Archivos de imagen (*.jpg)(*.jpeg)|*.jpg;*.jpeg|PNG (*.png)|*.png";
+
+			if (seleccion.ShowDialog() == DialogResult.OK)
+			{
+				Bitmap orig = new Bitmap(Path.GetFullPath(seleccion.FileName).Replace(@"\", @"\\"));
+				bmp = new Bitmap(Redimensionar(orig, 270, 270));
+				imgTrab1.Image = bmp;
+				hayImagen = true;
+				label13.Visible = false;
+				label2.Visible = false;
+			}
+		}
+
+		private void btnCancelar_Click(object sender, EventArgs e)
+		{
+			this.Close();
+		}
+		private Bitmap Redimensionar(Image imagenOriginal, int ancho, int alto)
+		{
+			Bitmap ImagenRedimencionda = new Bitmap(ancho, alto);
+			Graphics.FromImage(ImagenRedimencionda).DrawImage(imagenOriginal, 0, 0, ancho, alto);
+			Bitmap imagenFinal = new Bitmap(ImagenRedimencionda);
+			return imagenFinal;
+		}
+
+		private void btnAceptar_Click(object sender, EventArgs e)
+		{
+			bool textos = tbNombre.Text != "" && tbEmail.Text != "" && tbCP.Text != "";
+			bool telefonos = tablaTels.Rows.Count > 1 && tablaTels.Rows != null;
+			bool redes = tablaRedes.Rows.Count > 1 && tablaRedes.Rows != null;
+			bool worksL = works.Count >= 1;
+			int IdEmp = 0;
+			string insertDatosEmpleado;
+            string destino = "";
+
+            co.Comando("START TRANSACTION;");
+			//Se consulta el ID del empleado para poder saber que idetificador tendra la imagen
+			
+
+			//CASO 1: TENER LOS DATOS
+			if (textos && telefonos && redes && worksL && hayImagen)
+			{
+				nombre = tbNombre.Text;
+				email = tbEmail.Text;
+				calle = tbCalle.Text;
+				colonia = tbColonia.Text;
+				cp = Convert.ToInt32(tbCP.Text);
+				ciudad = tbCiudad.Text;
+				estado = tbEstado.Text;
+				rfc = tbRFC.Text;
+				int sexo = radioButton1.Checked ? 1 : 0;
+				//ADAPTAMOS AL FORMATO
+				fechaNac = fechaN.Value.Date.ToString("yyyy-MM-dd");
+
+				insertDatosEmpleado = "CALL insert_Empleado('" + nombre + "','" + email + "','" + calle + "','" + colonia + "'," + cp + ",'" + ciudad + "'," +
+										"'" + estado + "','" + rfc + "','" + fechaNac + "'," + sexo + ", " + co.sesion + ");";
+				try
+				{
+
+					co.Comando(insertDatosEmpleado);
+
+                    co.Comando("SELECT MAX(ID) FROM Empleado;");
+                    if (co.LeerRead)
+                         IdEmp = co.Leer.GetInt32(0);
+
+                    destino = Path.Combine("C:\\Imagenes\\", "imagen" + (IdEmp) + ".jpeg").Replace(@"\", @"\\");
+
+                    co.Comando("UPDATE Empleado SET imagenEmpleado = '" + destino + "' WHERE ID = "+IdEmp+";");
+
+                    bmp.Save(destino);
+
+                    for (int i = 0; i < tablaTels.Rows.Count - 1; i++)
+					{
+						co.Comando("CALL insert_Telefonos('" + tablaTels.Rows[i].Cells[0].Value + "', " + co.sesion +")");
+					}
+
+                    for (int i = 0; i < works.Count; i++)
+                    {
+                        switch (works[i])
+                        {
+                            case "Diseñador":
+                                co.Comando("CALL insert_EmpleadoTipoEmpleado(" + 1 + "," + co.sesion + ");");
+                                break;
+
+                            case "Editor":
+                                co.Comando("CALL insert_EmpleadoTipoEmpleado(" + 2 + "," + co.sesion + ");");
+                                break;
+
+                            case "Fotógrafo":
+                                co.Comando("CALL insert_EmpleadoTipoEmpleado(" + 3 + "," + co.sesion + ");");
+                                break;
+
+                            case "Maquetador":
+                                co.Comando("CALL insert_EmpleadoTipoEmpleado(" + 4 + "," + co.sesion + ");");
+                                break;
+
+                            case "Ilustrador":
+                                co.Comando("CALL insert_EmpleadoTipoEmpleado(" + 5 + "," + co.sesion + ");");
+                                break;
+
+                            case "Imprenta":
+                                co.Comando("CALL insert_EmpleadoTipoEmpleado(" + 6 + "," + co.sesion + ");");
+                                break;
+
+                            case "Publicidad":
+                                co.Comando("CALL insert_EmpleadoTipoEmpleado(" + 7 + "," + co.sesion + ");");
+                                break;
+                        }
+
+                    }
+
+                    AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Los datos se guardaron con éxito", 2);
+					mens.ShowDialog();
+					f1.refreshTable();
+					this.Close();
+
+					//PARA REDES
+					for (int i = 0; i < tablaRedes.Rows.Count - 1; i++)
+					{
+						string selectIDRedes = " SELECT ID FROM TipoDeRedSocial WHERE NombreRedSocial ='" + tablaRedes.Rows[i].Cells[0].Value + "';";
+
+						idRedes.Add(Convert.ToInt32(queryToString(selectIDRedes)));
+					}
+
+
+					for (int i = 0; i < tablaRedes.Rows.Count - 1; i++)
+					{
+						co.Comando("INSERT INTO RedesSociales VALUES" +
+							"((SELECT MAX(ID) FROM Empleado),'" + tablaRedes.Rows[i].Cells[1].Value + "'," + idRedes[i] + "," + co.sesion +");");
+					}
+				}
+
+				catch (Exception)
+				{
+					co.Comando("ROLLBACK;");
+					AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Algo ha salido mal al guardar los datos del empleado", 3);
+					mens.ShowDialog();
+					this.Close();
+				}
+			}
+
+			//CASO 2: SIN REDES SOCIALES
+			else if (textos && telefonos && redes == false && worksL && hayImagen)
+			{
+				AppProyectoBD.MessageBox res = new AppProyectoBD.MessageBox("¿Está seguro de que quiere continuar sin redes sociales?", 1);
+				res.ShowDialog();
+				if (resultado1)
+				{
+					nombre = tbNombre.Text;
+					email = tbEmail.Text;
+					calle = tbCalle.Text;
+					colonia = tbColonia.Text;
+					cp = Convert.ToInt32(tbCP.Text);
+					ciudad = tbCiudad.Text;
+					estado = tbEstado.Text;
+					rfc = tbRFC.Text;
+					int sexo = radioButton1.Checked ? 1 : 0;
+					//ADAPTAMOS AL FORMATO
+					fechaNac = fechaN.Value.Date.ToString("yyyy-MM-dd");
+
+					insertDatosEmpleado = "CALL insert_Empleado('" + nombre + "','" + email + "','" + calle + "','" + colonia + "'," + cp + ",'" + ciudad + "'," +
+										"'" + estado + "','" + rfc + "','" + fechaNac + "'," + sexo + ", " + co.sesion + ");";
+					try
+					{
+						co.Comando(insertDatosEmpleado);
+
+
+                        co.Comando("SELECT MAX(ID) FROM Empleado;");
+                        if (co.LeerRead)
+                             IdEmp = co.Leer.GetInt32(0);
+
+
+                        destino = Path.Combine("C:\\Imagenes\\", "imagen" + (IdEmp) + ".jpeg").Replace(@"\", @"\\");
+
+                        co.Comando("UPDATE Empleado SET imagenEmpleado = '" + destino + "' WHERE ID = " + IdEmp + ";");
+
+                        bmp.Save(destino);
+
+                        for (int i = 0; i < tablaTels.Rows.Count - 1; i++)
+						{
+							co.Comando("CALL insert_Telefonos('" + tablaTels.Rows[i].Cells[0].Value + "', " + co.sesion + ")");
+						}
+
+                        for (int i = 0; i < works.Count; i++)
+                        {
+                            switch (works[i])
+                            {
+                                case "Diseñador":
+                                    co.Comando("CALL insert_EmpleadoTipoEmpleado(" + 1 + "," + co.sesion + ");");
+                                    break;
+
+                                case "Editor":
+                                    co.Comando("CALL insert_EmpleadoTipoEmpleado(" + 2 + "," + co.sesion + ");");
+                                    break;
+
+                                case "Fotógrafo":
+                                    co.Comando("CALL insert_EmpleadoTipoEmpleado(" + 3 + "," + co.sesion + ");");
+                                    break;
+
+                                case "Maquetador":
+                                    co.Comando("CALL insert_EmpleadoTipoEmpleado(" + 4 + "," + co.sesion + ");");
+                                    break;
+
+                                case "Ilustrador":
+                                    co.Comando("CALL insert_EmpleadoTipoEmpleado(" + 5 + "," + co.sesion + ");");
+                                    break;
+
+                                case "Imprenta":
+                                    co.Comando("CALL insert_EmpleadoTipoEmpleado(" + 6 + "," + co.sesion + ");");
+                                    break;
+
+                                case "Publicidad":
+                                    co.Comando("CALL insert_EmpleadoTipoEmpleado(" + 7 + "," + co.sesion + ");");
+                                    break;
+                            }
+
+                        }
+
+                        AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("El empleado se creó con éxito", 2);
+						mens.ShowDialog();
+						f1.refreshTable();
+						this.Close();
+					}
+
+					catch (Exception)
+					{
+						co.Comando("ROLLBACK;");
+						AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Se ha producido un error al crear al empleado", 3);
+						mens.ShowDialog();
+						this.Close();
+					}
+
+				}
+			}
+
+			//CASO 3: DATOS INSUFICIENTES
+			else
+			{
+				label1.ForeColor = System.Drawing.Color.Red;
+				label2.ForeColor = System.Drawing.Color.Red;
+				label3.ForeColor = System.Drawing.Color.Red;
+				label5.ForeColor = System.Drawing.Color.Red;
+				label8.ForeColor = System.Drawing.Color.Red;
+				label14.ForeColor = System.Drawing.Color.Red;
+
+				co.Comando("COMMIT;");
+				AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Llene los datos del usuario mínimos:\n Datos personales (con fotografía), tipo de trabajador y teléfonos", 3);
+				mens.ShowDialog();
+                resultado1 = false;
+			}
+
+			co.Comando("COMMIT;");
+
+		}
+		private void btnAddTelNum_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				tels.Rows.Add(tbTel.Text);
+				tablaTels.DataSource = tels;
+			}
+			catch (ArgumentException)
+			{
+				AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("Ingrese un número de teléfono", 3);
+				mens.ShowDialog();
+			}
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				tablaTels.Rows.RemoveAt(tablaTels.CurrentRow.Index);
+			}
+
+			catch (Exception)
+			{
+				//NADA
+			}
+
+		}
+
+		private void tbCP_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			//EL CÓDIGO POSTAL TIENE QUE SER NUMÉRICO, ASI QUE SE LIMITA CON CÓDIGO
+			const char Delete = (char)8;
+			e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+		}
+
+		private void btn_addWork_Click(object sender, EventArgs e)
+		{
+			//ACUMULAR EN CADENA DEPENDIENDO DE CIERTOS FACTORES, ADEMÁS DE PROHIBIR QUE SE PUEDA INGRESAR IMPRENTA Y PUBLICIDAD
+			if (works.Count != 0 && (cbTipoTrab.Text == "Imprenta" || cbTipoTrab.Text == "Publicidad"))
+			{
+				AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No puedes agregar imprenta y publicidad teniendo otros tipos selecconaodos", 2);
+				mens.ShowDialog();
+			}
+
+			else if (works.Count != 0 && (works[works.Count - 1] == "Imprenta" || works[works.Count - 1] == "Publicidad") && (cbTipoTrab.Text != "Imprenta" || cbTipoTrab.Text != "Publicidad"))
+			{
+				AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se puede agregar otro tipo teniendo a imprenta o publicidad", 2);
+				mens.ShowDialog();
+			}
+
+			else if (works.Count != 0 && works.Contains(cbTipoTrab.Text))
+			{
+				AppProyectoBD.MessageBox mens = new AppProyectoBD.MessageBox("No se puede elegir dos veces la misma opción", 2);
+				mens.ShowDialog();
+			}
+
+			else
+			{
+				works.Add(cbTipoTrab.Text);
+				labelwork.Text = string.Join("/", works.ToArray());
+			}
+		}
+
+		private void btnAddNet_Click(object sender, EventArgs e)
+		{
+
+			try
+			{
+				if (!tbCuenta.Text.Equals(null) && !tbCuenta.Text.Equals(""))
+				{
+					redes.Rows.Add(cbRedes.Text, tbCuenta.Text);
+					tablaRedes.DataSource = redes;
+				}
+			}
+
+			catch (Exception)
+			{
+				//NADA
+			}
+		}
+
+
+		private void btnDelRedes_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				tablaRedes.Rows.RemoveAt(tablaRedes.CurrentRow.Index);
+			}
+
+			catch (Exception)
+			{
+				//NADA
+			}
+
+		}
+
+		private void btn_DelWork_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				works.RemoveAt(works.Count - 1);
+				labelwork.Text = string.Join("/", works.ToArray());
+			}
+
+			catch (Exception)
+			{
+				//NADA
+			}
+		}
+
+		private void tbTel_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			//se prohíbe la entrada de caracteres que no sean dígitos
+			const char Delete = (char)8;
+			e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+		}
+
+		private void panel1_MouseDown(object sender, MouseEventArgs e)
+		{
+			Funciones.ReleaseCapture();
+			Funciones.SendMessage(this.Handle, 0x112, 0xf012, 0);
+		}
+
+		private void panel1_Paint(object sender, PaintEventArgs e)
+		{
+
+		}
+
+		private void label12_Click(object sender, EventArgs e)
+		{
+
+		}
+	}
+}

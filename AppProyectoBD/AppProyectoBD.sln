@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppProyectoBD", "AppProyectoBD\AppProyectoBD.csproj", "{C71FFEA6-B8B4-48B3-9BFD-4B9425F51024}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "EditorialPiedraInstalador", "EditorialPiedraInstalador\EditorialPiedraInstalador.vdproj", "{881571B1-ECC0-4BDA-944E-3BC763ACE13F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C71FFEA6-B8B4-48B3-9BFD-4B9425F51024}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C71FFEA6-B8B4-48B3-9BFD-4B9425F51024}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C71FFEA6-B8B4-48B3-9BFD-4B9425F51024}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C71FFEA6-B8B4-48B3-9BFD-4B9425F51024}.Release|Any CPU.Build.0 = Release|Any CPU
+		{881571B1-ECC0-4BDA-944E-3BC763ACE13F}.Debug|Any CPU.ActiveCfg = Debug
+		{881571B1-ECC0-4BDA-944E-3BC763ACE13F}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E098DDE9-3E05-417C-BB16-BD46236FA46A}
+	EndGlobalSection
+EndGlobal
